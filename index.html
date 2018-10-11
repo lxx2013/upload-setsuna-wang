@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="main">
+        <h1>基于HTML5的多图Ajax上传实例页面</h1>
+        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="upload_box">
+                <div class="upload_main">
+                    <div class="upload_choose">
+                        <input id="fileImage" type="file" size="30" name="fileselect[]" multiple="" accept="image/jpeg,image/png,image/gif">
+                        <span id="fileDragArea" class="upload_drag_area">或者将图片拖到此处</span>
+                    </div>
+                    <div id="preview" class="upload_preview"></div>
+                </div>
+                <div class="upload_submit">
+                    <button type="button" id="fileSubmit" class="upload_submit_btn">确认上传图片</button>
+                </div>
+                <div id="uploadInf" class="upload_inf"></div>
+            </div>
+        </form>
+    </div>
+</body>
+<script src="/js/ZXXFILE.js"></script>
+<script>
+    const $ = function(a){return document.querySelector(a)};
+    ZXXFILE.fileInput = $('#fileImage')
+    ZXXFILE.upButton = $('#fileSubmit')
+    ZXXFILE.url = location.origin+$('#uploadForm').getAttribute('action');
+    ZXXFILE.init();
+
+</script>
+</html>
