@@ -8,12 +8,15 @@
   - [ ] 文件上传接口
   - [ ] 拖拽相关操作
   - [ ] 图床上的图片链接
+- [ ] [laobubu](https://github.com/laobubu)提出的根据一个 url 拿到需打印文档的服务,例如在打印店里访问`http://xx.firefox.com/fileName.doc`来打印
+- [ ] 图片切割 `image?width=200&height=200/webp`
 - [ ] 后期前端页面切换为`vuetify`+`nuxt`
 - [ ] 增加第三方的图床 API
   - [ ] sm.ms
   - [ ] 七牛云
   - [ ] 针对三家图床API(包括自己)使用图标颜色来标注 `宕机` or `正常服务中`
- 
+
+
 ## 参考文档
 - [鑫空间/安兹·乌尔·恭的超位魔法-任意拖拽](https://www.zhangxinxu.com/wordpress/2018/09/drag-drop-datatransfer-js/)
 - [掘金 Koa2文件上传下载](https://juejin.im/post/5abc451ff265da23a2292dd4)
