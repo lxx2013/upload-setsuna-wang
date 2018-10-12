@@ -14,5 +14,8 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.4"
+  },
+  "scripts":{
+    "count":"find . ! -path './node_modules/*' ! -path './.git/*' -type f -name \"*[.html|.js]\"  | xargs cat | wc -l"
   }
 }
