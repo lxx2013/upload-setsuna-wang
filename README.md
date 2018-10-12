@@ -34,7 +34,7 @@ ipt.ondrop = function(e) {
   console.log(files);
 };
 ```
-#### 2. FileList 中的 File 对象属性
+#### 2. FileList中的 File 对象属性
 - `name`：文件名，该属性只读。
 - `size`：文件大小，单位为字节，该属性只读。
 - `type`：文件的 MIME 类型，如果分辨不出类型，则为空字符串，该属性只读。
