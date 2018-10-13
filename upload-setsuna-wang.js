@@ -8,34 +8,46 @@ const koaBody = require('koa-body');
 
 var router = new Router()
 router.get('/', ctx => {
-    console.log(ctx.request)
     console.log(`path${ctx.request.path}`)
     if (ctx.request.accepts('html')) {
         ctx.response.type = 'text/html'
         ctx.response.body = fs.readFileSync(__dirname + '/index.html')
     }
 })
-router.post('/upload', async (ctx) => {
-    try {
-        const file = ctx.request.files.file;	// 获取上传文件
-        const reader = fs.createReadStream(file.path);	// 创建可读流
-        const ext = file.name.split('.').pop();		// 获取上传文件扩展名
-        const upStream = fs.createWriteStream(`upload/${Math.random().toString()}.${ext}`);		// 创建可写流
-        reader.pipe(upStream);	// 可读流通过管道写入可写流
-        return ctx.body = JSON.stringify({
-            status: 'succuss',
-            message: '上传成功',
-        })
+
+const path = require('path');
+router.post('/upload', async function (ctx) {
+    const outputDir = path.join(__dirname, 'static');
+    const filePaths = [];
+    const files = ctx.request.body.files || ctx.request.files || {};
+    console.log(files);
+    for (let key in files) {
+        const file = files[key];
+        const filePath = path.join(outputDir, file.name);
+        const reader = fs.createReadStream(file.path);
+        const writer = fs.createWriteStream(filePath);
+        reader.pipe(writer);
+        filePaths.push(filePath);
     }
-    catch (err) {
-        return ctx.body = JSON.stringify({
-            status: 'error',
-            message: err,
-            log:ctx.request
-        },null,2)
-    }
+    ctx.body = {
+        status:'success',
+        filePaths:filePaths
+    };
 })
 
+//阮一峰错误处理函数 , 全局 try catch http://www.ruanyifeng.com/blog/2017/08/koa.html
+const handler = async (ctx, next) => {
+    try {
+        await next();
+    } catch (err) {
+        ctx.response.status = err.statusCode || err.status || 500;
+        ctx.response.body = {
+            status: 'error',
+            message: err.message
+        };
+    }
+};
+app.use(handler)
 app.use(koaBody({
     multipart: true,
     formidable: {

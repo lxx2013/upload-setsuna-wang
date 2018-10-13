@@ -39,7 +39,7 @@ router.get('/', async (ctx) => {
 
 app.use(router.routes())
 app.use(router.allowedMethods())
-app.use(serve(__dirname))
+app.use(serve(__dirname+'/static'))
 app.listen(8201, () => {
     console.log('koa is listening on 8201...');
 })
