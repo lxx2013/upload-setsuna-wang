@@ -99,7 +99,6 @@ var ZXXFILE = {
 							}
 						}
 					};
-		
 					// 开始上传
 					xhr.open("POST", self.url, true);
                     xhr.setRequestHeader("FILENAME", encodeURIComponent(file.name));

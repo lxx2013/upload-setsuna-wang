@@ -1,0 +1,44 @@
+*{
+  border:none; margin:0; padding:0;
+}
+.main{
+  background-image: url(bg.jpg);
+  background-repeat:no-repeat;
+  background-size: cover;
+  background-position: -50px 0 ;
+  position:absolute; top:0;right:0;bottom:0;left:0;
+  overflow:auto;
+}
+.area{
+  width: 60vw;
+  height: 60vw;
+  margin: 20vw auto 0;
+  background-color: #ffffff75;
+  box-shadow: 0 0px 4px 0 rgba(0,0,0,0.8);
+}
+.area:hover{
+  box-shadow: 0 0px 20px 0 rgba(0,0,0,0.5) inset,0 0px 4px 0 rgba(0,0,0,0.5);
+}
+.button{
+    margin : 6vw 20vw 0;
+    display:flex;
+    justify-content:space-around;
+    flex-direction:row;
+}
+.folder-open{
+  display: inline-block;
+  color:white;
+  background-color: #2780e3;
+  border-color: #2780e3;
+  padding:6px 12px;
+  font-family: "Segoe UI";
+  font-size: 12px;
+  box-shadow: 0 0px 4px 0 rgba(0,0,0,0.5);
+}
+.folder-open:hover{
+  background-color: #1967be;
+  border-color: #1862b5;
+}
+#fileImage{
+  display:none;
+}

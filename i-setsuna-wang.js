@@ -5,7 +5,7 @@ const path = require('path')
 const app = new Koa()
 const Router = require('koa-router')
 const serve = require('koa-static')
-const staticUtil = require('./js/staticUtil')
+const staticUtil = require('./assets/staticUtil')
 
 var router = new Router()
 // 静态资源服务器
