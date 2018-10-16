@@ -31,7 +31,7 @@ router.post('/upload', async function (ctx) {
     }
     ctx.body = {
         status:'success',
-        filePaths:filePaths
+        filePaths:filePaths.map(x=>x.replace(/\/.*\//,'https://i.setsuna.wang/'))
     };
 })
 
