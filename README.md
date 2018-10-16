@@ -5,7 +5,7 @@
 
 ## 计划
 - [ ] 初始时使用手写简单 html 和原生 js 完成:
-  - [ ] 文件上传接口
+  - [x] 文件上传接口 `v0.1.0`
   - [ ] 拖拽相关操作
   - [ ] 图床上的图片链接
 - [ ] [laobubu](https://github.com/laobubu)提出的根据一个 url 拿到需打印文档的服务,例如在打印店里访问`http://xx.firefox.com/fileName.doc`来打印
@@ -15,7 +15,7 @@
   - [ ] sm.ms
   - [ ] 七牛云
   - [ ] 针对三家图床API(包括自己)使用图标颜色来标注 `宕机` or `正常服务中`
-
+- [ ] 对访客进行统计
 ## 总结
 #### 0. 绑定`document.querySelector` 到`$`
 直接赋值后运行会报错, 报错的原因是 `querySelectorAll` 所需的执行上下文必需是 `document`，而我们赋值到 `$` 调用后上下文变成了全局 `window` ,正确的应该是
@@ -56,6 +56,9 @@ ipt.ondrop = function(e) {
 
 #### 3. FileReader 对象
 - `readAsText(Blob|File, opt_encoding)`：返回文本字符串。默认情况下，文本编码格式是’UTF-8’，可以通过可选的格式参数，指定其他编码格式的文本。
+- `readAsDataURL`
+>*注意:`FileList`这个对象不是很严谨,它的 length 和 item 等等都能被`map`或`for..in`访问到,因此只能使用
+`for(var i = 0;i<FileList.length;i++)`来遍历*
 - 事件
   - `onabort`事件：读取中断或调用reader.abort()方法时触发。
   - `onerror`事件：读取出错时触发。
@@ -69,9 +72,22 @@ ipt.ondrop = function(e) {
       - `funDragHover` 
         - 如果此时`e.type`是`dragover`就执行`onDragOver`函数
         - 否则执行`onDragLeave`函数  
-      - `fileFilter`对象继续concat从`filter`过滤后的文件  
-      - 执行`onSelect`
-      - *return*
+      - 从`fileFilter`中读取`file`并使用`new FileReader()`对应的`readAsDataURL(file)`来把 base64编码的图像放入 DOM 中 ,其中把 onload 事件回调封装为了 Promise 
+          ```js
+          readFile: function (file) {
+            return new Promise((resolve, reject) => {
+              var reader = new FileReader()
+              reader.onload = e => {
+                resolve(e.target.result)
+              }
+              reader.onerror = e => {
+                reject('readFile error!')
+              }
+              reader.readAsDataURL(file)
+            })
+          },
+          ```
+          调用的时候使用`await this.readFile(files[i])`即可
 - 点击<kbd>确认上传</kbd> => 执行 `funUploadFile` 函数
     - 从`fileFilter`中取出文件并创建 `XMLHttpRequest()`来以 POST 形式发送`new FormData()`
     - 若`xhr.readyState == 4 && xhr.status ==200`执行`onSuccess(file,xhr.responseText)`回调
