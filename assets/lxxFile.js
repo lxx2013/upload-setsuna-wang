@@ -1,16 +1,24 @@
 /*
- * zxxFile.js 基于HTML5 文件上传的核心脚本 http://www.zhangxinxu.com/wordpress/?p=1923
- * by zhangxinxu 2011-09-12
+ * lxxFile.js html5 file 上传组件
+ * by Xinxing Li at 2018-10-16
+ * 参考了 ZXXFile
 */
+Vue.component('file-upload', { /* ... */ })
 
-var ZXXFILE = {
-	fileInput: null,				//html file控件
-	dragDrop: null,					//拖拽敏感区域
-	upButton: null,					//提交按钮
-	url: "",						//ajax地址
+var app = new Vue({
+el: '#app',
+data: {
+	url: "./upload",						//ajax地址
 	fileFilter: [],					//过滤后的文件数组
-	filter: function(files) {		//选择文件组的过滤方法
-		return files;	
+},
+methods:{
+	filter: function (files) {
+			var arrFiles = [];
+			for (var i = 0, file; file = files[i]; i++) {
+					console.log(`[index.html filter]第${i}个文件: ${file.name} 文件MIME为: ${file.type}`);
+					arrFiles.push(file);
+			}
+			return arrFiles;
 	},
 	onSelect: function() {},		//文件选择后
 	onDelete: function() {},		//文件删除后
@@ -20,13 +28,12 @@ var ZXXFILE = {
 	onSuccess: function() {},		//文件上传成功时
 	onFailure: function() {},		//文件上传失败时,
 	onComplete: function() {},		//文件全部上传完毕时
-	
 	/* 开发参数和内置方法分界线 */
-	
 	//文件拖放
 	funDragHover: function(e) {
 		e.stopPropagation();
 		e.preventDefault();
+		console.log(`[ZXXFILE.js funDraHover] e.type: ${e.type}`)
 		this[e.type === "dragover"? "onDragOver": "onDragLeave"].call(e.target);
 		return this;
 	},
@@ -34,26 +41,16 @@ var ZXXFILE = {
 	funGetFiles: function(e) {
 		// 取消鼠标经过样式
 		this.funDragHover(e);
-				
+
 		// 获取文件列表对象
 		var files = e.target.files || e.dataTransfer.files;
 		//继续添加文件
-		this.fileFilter = this.fileFilter.concat(this.filter(files));
-		this.funDealFiles();
+		var filted = this.filter(files)
+		this.fileFilter = this.fileFilter.concat(filted);
+		this.onSelect(filted);
 		return this;
 	},
-	
-	//选中文件的处理与回调
-	funDealFiles: function() {
-		for (var i = 0, file; file = this.fileFilter[i]; i++) {
-			//增加唯一索引值
-			file.index = i;
-		}
-		//执行选择回调
-		this.onSelect(this.fileFilter);
-		return this;
-	},
-	
+
 	//删除对应的文件
 	funDeleteFile: function(fileDelete) {
 		var arrFile = [];
@@ -67,7 +64,7 @@ var ZXXFILE = {
 		this.fileFilter = arrFile;
 		return this;
 	},
-	
+
 	//文件上传
 	funUploadFile: function() {
 		var self = this;	
@@ -83,9 +80,10 @@ var ZXXFILE = {
 					xhr.upload.addEventListener("progress", function(e) {
 						self.onProgress(file, e.loaded, e.total);
 					}, false);
-		
+
 					// 文件上传成功或是失败
 					xhr.onreadystatechange = function(e) {
+						console.log(`[ZXXFILE.js funUploadFile]:xhr.readyState:${xhr.readyState} xhr.status:${xhr.status} xhr.reponseText:\n${xhr.responseText}`)
 						if (xhr.readyState == 4) {
 							if (xhr.status == 200) {
 								self.onSuccess(file, xhr.responseText);
@@ -101,33 +99,15 @@ var ZXXFILE = {
 					};
 					// 开始上传
 					xhr.open("POST", self.url, true);
-                    xhr.setRequestHeader("FILENAME", encodeURIComponent(file.name));
-                    var newForm = new FormData();
-                    newForm.append("file",file)
+					xhr.setRequestHeader("FILENAME", encodeURIComponent(file.name));
+					var newForm = new FormData();
+					newForm.append("file",file)
 					xhr.send(newForm);
 				}	
 			})(file);	
 		}	
-			
+
 	},
-	
-	init: function() {
-		var self = this;
-		
-		if (this.dragDrop) {
-			this.dragDrop.addEventListener("dragover", function(e) { self.funDragHover(e); }, false);
-			this.dragDrop.addEventListener("dragleave", function(e) { self.funDragHover(e); }, false);
-			this.dragDrop.addEventListener("drop", function(e) { self.funGetFiles(e); }, false);
-		}
-		
-		//文件选择控件选择
-		if (this.fileInput) {
-			this.fileInput.addEventListener("change", function(e) { self.funGetFiles(e); }, false);	
-		}
-		
-		//上传按钮提交
-		if (this.upButton) {
-			this.upButton.addEventListener("click", function(e) { self.funUploadFile(e); }, false);	
-		} 
-	}
-};
+}
+})
+

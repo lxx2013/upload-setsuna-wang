@@ -5,25 +5,32 @@
   background-image: url(bg.jpg);
   background-repeat:no-repeat;
   background-size: cover;
-  background-position: -50px 0 ;
   position:absolute; top:0;right:0;bottom:0;left:0;
   overflow:auto;
 }
 .area{
-  width: 60vw;
-  height: 60vw;
-  margin: 20vw auto 0;
-  background-color: #ffffff75;
+  max-width:432px;
+  max-height:250px;
+  width: 80vw;
+  height: 80vw;
+  margin: 80px auto 0;
+  background-color: #00000044;
   box-shadow: 0 0px 4px 0 rgba(0,0,0,0.8);
+  color:white;
+  text-align: center;
+  font-size: 0;
+  overflow:auto;
+
 }
 .area:hover{
   box-shadow: 0 0px 20px 0 rgba(0,0,0,0.5) inset,0 0px 4px 0 rgba(0,0,0,0.5);
 }
 .button{
-    margin : 6vw 20vw 0;
+    margin : 20px 10vw 0;
     display:flex;
-    justify-content:space-around;
+    justify-content: space-around;
     flex-direction:row;
+    white-space: nowrap;
 }
 .folder-open{
   display: inline-block;
@@ -41,4 +48,51 @@
 }
 #fileImage{
   display:none;
+}
+#preview{
+  display:flex;
+  flex-wrap:wrap;
+  flex-direction: row;
+}
+.upload_append_list{
+  display:inline-block;
+  box-sizing: border-box;
+}
+.upload_append_list>div {
+  flex-shrink: 1;
+  background-color: #00000000;
+  padding:2px;
+  box-shadow: 0 0 4px #00000020;
+}
+.upload_append_list>div:hover{
+  background-color: #00000090;
+}
+.upload_append_list .img-info{
+  display:none;
+}
+.upload_append_list>div:hover .img-info{
+  display:block;
+}
+.upload_append_list .img-title{
+  text-align: center;
+  font-size: 10px;
+  color:#ffffff70;
+}
+.upload_append_list>div a{
+  margin-right: 0px;
+}
+.upload_image{
+  max-width:100%;
+}
+.delete_button{
+  display:inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+.mid{
+  width:50%;
+}
+.small{
+  width:33%;
 }

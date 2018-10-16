@@ -10,93 +10,94 @@
 </head>
 
 <body>
-  <div class="main">
-    <div class="area" id="fileDragArea">
-      <div><span>Drag & drop files here ...</span></div>
+  <div class="main" id="app">
+    <div class="area" @dragover="funDragHover" @dragleave="funDragHover" @drop="funGetFiles">
+      <div id="preview"><span>Drag & drop files here ...</span></div>
     </div>
-    <div class="button"><span class="folder-open">添加文件</span><span class="folder-open">确认上传</span></div>
+    <div class="button">
+      <span class="folder-open" @click="$refs.input.click()">添加文件</span>
+      <span id="fileSubmit" class="folder-open" @click="funUploadFile">确认上传</span>
+    </div>
+    <div id="uploadInf"></div>
   </div>
-  <form id="uploadForm" action="../upload">
-    <input id="fileImage" type='file' multiple />
+  <form id="uploadForm" :action="url">
+    <input id="fileImage" type='file' multiple @change="funGetFiles" ref="input" />
   </form>
 </body>
 
-<script src="./assets/ZXXFILE.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- 生产环境版本，优化了尺寸和速度 -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+<script src="./assets/lxxFile.js"></script>
 <script>
   var $ = document.querySelector.bind(document);
-  var $$ = document.querySelectorAll.bind(document);
-  $('.folder-open').onclick = () => {
-    $('#fileImage').click();
-  }
   var params = {
-    fileInput: $("#fileImage"),
-    dragDrop: $("#fileDragArea"),
-    upButton: $("#fileSubmit"),
-    url: $("#uploadForm").getAttribute("action"),
-    filter: function (files) {
-      var arrFiles = [];
-      for (var i = 0, file; file = files[i]; i++) {
-        console.log(`第${i}个文件: ${file.name} 文件MIME为: ${file.type}`);
-        arrFiles.push(file);
-      }
-      return arrFiles;
-    },
+
     onSelect: function (files) {
       var html = '', i = 0;
-      $("#preview").html('<div class="upload_loading"></div>');
       var funAppendImage = function () {
         file = files[i];
         if (file) {
+          this.file_count++;
           var reader = new FileReader()
           reader.onload = function (e) {
-            html = html + '<div id="uploadList_' + i + '" class="upload_append_list"><p><strong>' + file.name + '</strong>' +
-              '<a href="javascript:" class="upload_delete" title="删除" data-index="' + i + '">删除</a><br />' +
-              '<img id="uploadImage_' + i + '" src="' + e.target.result + '" class="upload_image" /></p>' +
-              '<span id="uploadProgress_' + i + '" class="upload_progress"></span>' +
-              '</div>';
+            html = `<div id="uploadList_${file_count}"class="upload_append_list">
+                              <div>
+                                <img src="${e.target.result}" class="upload_image" />
+                                <div class="img-info>
+                                  <span class="img-title" >${file.name}</span>
+                                  <a href="javascript:" class="upload_delete" title="删除" data-index="${i}"></a>
+                                </div>
+                              </div>
+                              <span id="uploadProgress_${i} "class="upload_progress"></span>
+                           </div>`;
 
             i++;
             funAppendImage();
           }
           reader.readAsDataURL(file);
         } else {
-          $("#preview").html(html);
+          var obj = document.createElement('div');
+          obj.innerHTML = html;
+          console.log(obj);
+          $("#preview").appendChild(obj.firstChild);
           if (html) {
             //删除方法
             $(".upload_delete").click(function () {
-              ZXXFILE.funDeleteFile(files[parseInt($(this).attr("data-index"))]);
+              ZXXFILE.funDeleteFile(files[parseInt(this.getAttribute("data-index"))]);
               return false;
             });
-            //提交按钮显示
-            $("#fileSubmit").show();
-          } else {
-            //提交按钮隐藏
-            $("#fileSubmit").hide();
           }
         }
       };
       funAppendImage();
+      if (files.length <= 4) {
+        $('.upload_append_list').classList.add('mid')
+      } else {
+        $('.upload_append_list').classList.remove('mid')
+        $('.upload_append_list').classList.add('small')
+      }
     },
     onDelete: function (file) {
       $("#uploadList_" + file.index).fadeOut();
       $('#uploadForm')[0].reset();
     },
     onDragOver: function () {
-      $(this).addClass("upload_drag_hover");
+      this.classList.add('upload_drag_hover')
     },
     onDragLeave: function () {
-      $(this).removeClass("upload_drag_hover");
+      this.classList.remove("upload_drag_hover")
     },
     onProgress: function (file, loaded, total) {
       var eleProgress = $("#uploadProgress_" + file.index), percent = (loaded / total * 100).toFixed(2) + '%';
       eleProgress.show().html(percent);
     },
     onSuccess: function (file, response) {
-      $("#uploadInf").append("<p>上传成功，图片地址是：" + response + "</p>");
+      $("#uploadInf").appendChild(document.createElement("<p>上传成功，图片地址是：" + response + "</p>"));
     },
     onFailure: function (file) {
-      $("#uploadInf").append("<p>图片" + file.name + "上传失败！</p>");
-      $("#uploadImage_" + file.index).css("opacity", 0.2);
+      $("#uploadInf").appendChild(document.createElement("<p>图片" + file.name + "上传失败！</p>"));
+      $("#uploadImage_" + file.index).style["opacity"] = 0.2;
     },
     onComplete: function () {
       //提交按钮隐藏
@@ -107,14 +108,6 @@
       $("#uploadInf").append("<p>当前图片全部上传完毕，可继续添加上传。</p>");
     }
   };
-  $.extend = function (origin, options) {
-    for (var i in options) {
-      origin[i] = options[i];
-    }
-    return origin;
-  }
-  ZXXFILE = $.extend(ZXXFILE, params);
-  ZXXFILE.init();
 </script>
 
 </html>

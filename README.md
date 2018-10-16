@@ -63,6 +63,21 @@ ipt.ondrop = function(e) {
   - `onloadend`事件：读取完成后触发，不管是否成功。触发顺序排在 onload 或 onerror 后面。
   - `onloadstart`事件：读取将要开始时触发。
   - `onprogress`事件：读取过程中周期性触发
+#### 4. ZXXFILE.js 执行流程
+-  点击<kbd>文件选择</kbd>并通过选择文件使得`#fileInput`元素触发`change`事件 => 执行 `funGetFiles` 函数
+    - `funGetFile`函数中依次执行
+      - `funDragHover` 
+        - 如果此时`e.type`是`dragover`就执行`onDragOver`函数
+        - 否则执行`onDragLeave`函数  
+      - `fileFilter`对象继续concat从`filter`过滤后的文件  
+      - 执行`onSelect`
+      - *return*
+- 点击<kbd>确认上传</kbd> => 执行 `funUploadFile` 函数
+    - 从`fileFilter`中取出文件并创建 `XMLHttpRequest()`来以 POST 形式发送`new FormData()`
+    - 若`xhr.readyState == 4 && xhr.status ==200`执行`onSuccess(file,xhr.responseText)`回调
+    - 若`xhr.status != 200`执行`onFailure(file,xhr.responseText)`回调
+    - 当`fileFilter.length为0`时执行`onComplete`回调, 通常什么也不做
+
 ## 参考文档
 - [鑫空间/安兹·乌尔·恭的超位魔法-任意拖拽](https://www.zhangxinxu.com/wordpress/2018/09/drag-drop-datatransfer-js/)
 - [掘金 Koa2文件上传下载](https://juejin.im/post/5abc451ff265da23a2292dd4)
