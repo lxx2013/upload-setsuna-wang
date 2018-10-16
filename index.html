@@ -12,102 +12,33 @@
 <body>
   <div class="main" id="app">
     <div class="area" @dragover="funDragHover" @dragleave="funDragHover" @drop="funGetFiles">
-      <div id="preview"><span>Drag & drop files here ...</span></div>
+      <div id="preview">
+        <span v-if="!fileFilter.length">Drag & drop files here ...</span>
+        <div id="uploadList_${file_count}"class="upload_append_list" :class="fileFilter.length<=4?'mid':'small'" v-for="(item,index) in fileFilter" :key="index">
+           <div>
+             <img :src="item.result" class="upload_image" />
+             <div class="img-info">
+               <span class="img-title" >{{item.name}}</span>
+               <a href="javascript:" class="upload_delete" title="删除"></a>
+             </div>
+           </div>
+           <span id="uploadProgress "class="upload_progress"></span>
+        </div>`
+      </div>
     </div>
     <div class="button">
       <span class="folder-open" @click="$refs.input.click()">添加文件</span>
       <span id="fileSubmit" class="folder-open" @click="funUploadFile">确认上传</span>
     </div>
     <div id="uploadInf"></div>
+    <form id="uploadForm" :action="url">
+      <input id="fileImage" type='file' multiple @change="funGetFiles" ref="input" />
+    </form>
   </div>
-  <form id="uploadForm" :action="url">
-    <input id="fileImage" type='file' multiple @change="funGetFiles" ref="input" />
-  </form>
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!-- 生产环境版本，优化了尺寸和速度 -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 <script src="./assets/lxxFile.js"></script>
-<script>
-  var $ = document.querySelector.bind(document);
-  var params = {
-
-    onSelect: function (files) {
-      var html = '', i = 0;
-      var funAppendImage = function () {
-        file = files[i];
-        if (file) {
-          this.file_count++;
-          var reader = new FileReader()
-          reader.onload = function (e) {
-            html = `<div id="uploadList_${file_count}"class="upload_append_list">
-                              <div>
-                                <img src="${e.target.result}" class="upload_image" />
-                                <div class="img-info>
-                                  <span class="img-title" >${file.name}</span>
-                                  <a href="javascript:" class="upload_delete" title="删除" data-index="${i}"></a>
-                                </div>
-                              </div>
-                              <span id="uploadProgress_${i} "class="upload_progress"></span>
-                           </div>`;
-
-            i++;
-            funAppendImage();
-          }
-          reader.readAsDataURL(file);
-        } else {
-          var obj = document.createElement('div');
-          obj.innerHTML = html;
-          console.log(obj);
-          $("#preview").appendChild(obj.firstChild);
-          if (html) {
-            //删除方法
-            $(".upload_delete").click(function () {
-              ZXXFILE.funDeleteFile(files[parseInt(this.getAttribute("data-index"))]);
-              return false;
-            });
-          }
-        }
-      };
-      funAppendImage();
-      if (files.length <= 4) {
-        $('.upload_append_list').classList.add('mid')
-      } else {
-        $('.upload_append_list').classList.remove('mid')
-        $('.upload_append_list').classList.add('small')
-      }
-    },
-    onDelete: function (file) {
-      $("#uploadList_" + file.index).fadeOut();
-      $('#uploadForm')[0].reset();
-    },
-    onDragOver: function () {
-      this.classList.add('upload_drag_hover')
-    },
-    onDragLeave: function () {
-      this.classList.remove("upload_drag_hover")
-    },
-    onProgress: function (file, loaded, total) {
-      var eleProgress = $("#uploadProgress_" + file.index), percent = (loaded / total * 100).toFixed(2) + '%';
-      eleProgress.show().html(percent);
-    },
-    onSuccess: function (file, response) {
-      $("#uploadInf").appendChild(document.createElement("<p>上传成功，图片地址是：" + response + "</p>"));
-    },
-    onFailure: function (file) {
-      $("#uploadInf").appendChild(document.createElement("<p>图片" + file.name + "上传失败！</p>"));
-      $("#uploadImage_" + file.index).style["opacity"] = 0.2;
-    },
-    onComplete: function () {
-      //提交按钮隐藏
-      $("#fileSubmit").hide();
-      //file控件value置空
-      $('#uploadForm')[0].reset();
-      // 成功提示
-      $("#uploadInf").append("<p>当前图片全部上传完毕，可继续添加上传。</p>");
-    }
-  };
-</script>
-
 </html>

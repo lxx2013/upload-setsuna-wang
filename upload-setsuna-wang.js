@@ -17,7 +17,10 @@ router.get('/', ctx => {
 
 const path = require('path');
 router.post('/upload', async function (ctx) {
-    const outputDir = path.join(__dirname, 'static');
+    const outputDir = path.join(__dirname, 'static/');
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir);
+    }
     const filePaths = [];
     const files = ctx.request.body.files || ctx.request.files || {};
     console.log(files);

@@ -63,7 +63,7 @@ ipt.ondrop = function(e) {
   - `onloadend`事件：读取完成后触发，不管是否成功。触发顺序排在 onload 或 onerror 后面。
   - `onloadstart`事件：读取将要开始时触发。
   - `onprogress`事件：读取过程中周期性触发
-#### 4. ZXXFILE.js 执行流程
+#### 4. lxxFile.js 执行流程
 -  点击<kbd>文件选择</kbd>并通过选择文件使得`#fileInput`元素触发`change`事件 => 执行 `funGetFiles` 函数
     - `funGetFile`函数中依次执行
       - `funDragHover` 
