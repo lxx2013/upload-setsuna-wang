@@ -10,14 +10,14 @@
 </head>
 
 <body>
-  <div class="main" id="app">
-    <div class="area" @dragover="funDragHover" @dragleave="funDragHover" @drop="funGetFiles">
+  <div class="main" id="app" @dragover.stop.prevent="onDragOver">
+    <div class="area" :class="{'hover':isHover,'drag':isDrag}" @dragover.stop.prevent="onDragOver"  @drop.prevent="funGetFiles">
       <div id="preview">
         <span v-if="!fileFilter.length">Drag & drop files here ...</span>
-        <div id="uploadList_${file_count}"class="upload_append_list" :class="fileFilter.length<=4?'mid':'small'" v-for="(item,index) in fileFilter" :key="index">
+        <div id="uploadList"class="upload_append_list" :class="fileFilter.length<=4?'mid':'small'" v-for="(item,index) in fileFilter" :key="index">
            <div>
              <img :src="item.result" class="upload_image" />
-             <div class="img-info">
+             <div class="img-info"> 
                <span class="img-title" >{{item.name}}</span>
                <a href="javascript:" class="upload_delete" title="删除"></a>
              </div>

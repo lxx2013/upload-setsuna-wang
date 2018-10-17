@@ -9,6 +9,8 @@ var app = new Vue({
   data: {
     url: "./upload",						//ajax地址
     fileFilter: [],					//过滤后的文件数组
+    isHover:false,
+    isDrag:false,
   },
   methods: {
     readFile: function (file) {
@@ -24,24 +26,30 @@ var app = new Vue({
       })
     },
     onDelete: function () { },		//文件删除后
-    onDragOver: function () { },		//文件拖拽到敏感区域时
-    onDragLeave: function () { },	//文件离开到敏感区域时
+    onDragOver: function (e) {
+      //文件拖拽到敏感区域时
+      console.log(e)
+      this.isDrag = true;
+      var classList = e.target.classList.toString()
+      console.log(classList)
+      if(classList.indexOf('area') != -1){
+        e.dataTransfer.dropEffect = "copy";
+        this.isHover = true;
+      }
+      else{
+        e.dataTransfer.dropEffect = "none";
+        this.isHover = false;
+      }
+    },	
     onProgress: function () { },		//文件上传进度
     onSuccess: function () { },		//文件上传成功时
     onFailure: function () { },		//文件上传失败时,
     onComplete: function () { },		//文件全部上传完毕时
     /* 开发参数和内置方法分界线 */
-    //文件拖放
-    funDragHover: function (e) {
-      e.stopPropagation();
-      e.preventDefault();
-      console.log(`[lxxFile.js funDraHover] e.type: ${e.type}`)
-      this[e.type === "dragover" ? "onDragOver" : "onDragLeave"].call(e.target);
-    },
     //获取选择文件，file控件或拖放
     funGetFiles: async function (e) {
-      // 取消鼠标经过样式
-      this.funDragHover(e);
+      this.isHover = false;
+      this.isDrag = false;
       // 获取文件列表对象
       var files = e.target.files || e.dataTransfer.files;
       //继续添加文件

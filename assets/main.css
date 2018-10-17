@@ -25,8 +25,12 @@
 .area:hover{
   box-shadow: 0 0px 20px 0 rgba(0,0,0,0.5) inset,0 0px 4px 0 rgba(0,0,0,0.5);
 }
+.area.hover{
+  box-shadow: 0 0px 20px 0 rgba(0,0,0,0.5) inset,0 0px 4px 0 rgba(0,0,0,0.5);
+}
 .button{
-    margin : 20px 10vw 0;
+    margin : 20px auto 0;
+    max-width:432px;
     display:flex;
     justify-content: space-around;
     flex-direction:row;
@@ -48,6 +52,9 @@
 }
 #fileImage{
   display:none;
+}
+.drag *{
+  pointer-events: none;
 }
 #preview{
   display:flex;

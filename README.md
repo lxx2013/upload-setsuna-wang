@@ -4,10 +4,11 @@
 ## 接口设计 *可参考 sm.ms*
 
 ## 计划
-- [ ] 初始时使用手写简单 html 和原生 js 完成:
+- [ ] 初始时简单完成:
   - [x] 文件上传接口 `v0.1.0`
-  - [ ] 拖拽相关操作
+  - [x] 拖拽相关操作 `v0.2.0`
   - [ ] 图床上的图片链接
+  - [ ] clipboard 
 - [ ] [laobubu](https://github.com/laobubu)提出的根据一个 url 拿到需打印文档的服务,例如在打印店里访问`http://xx.firefox.com/fileName.doc`来打印
 - [ ] 图片切割 `image?width=200&height=200/webp`
 - [ ] 后期前端页面切换为`vuetify`+`nuxt`
@@ -93,7 +94,21 @@ ipt.ondrop = function(e) {
     - 若`xhr.readyState == 4 && xhr.status ==200`执行`onSuccess(file,xhr.responseText)`回调
     - 若`xhr.status != 200`执行`onFailure(file,xhr.responseText)`回调
     - 当`fileFilter.length为0`时执行`onComplete`回调, 通常什么也不做
-
+#### 5. 拖拽相关
+- `DataTransfer对象`可通过`e.Datransfer`访问
+- 相关事件有`dragstart | dragenter | dragleave | dragover | drop | dragend`
+- 标准属性有
+    - 常用:`dropEffect` 常用来设置鼠标的脚标样式 有`none|copy|link|move`四个可选值
+    >注:有人说该属性仅在`dragover`事件中设置才有效.经测试在`dragleave`事件中设置该属性时, `Firefox 62.0.3`支持/`Chrome 69.0`不支持. 另外,建议使用`dragover`事件而非`dragenter`事件,因为`dragenter`内设置的`dropEffect`无法在后续的拖动过程中显示.且`enter+drop`的组合会遇到`drop`不生效的问题, `hover+drop`则正常
+    - 常用:`files` 用来获取被拖拽的文件
+    - 不常用: `effectAlowed | items(只读) | types(只读)`
+- 标准方法:详细见[鑫空间](https://www.zhangxinxu.com/wordpress/2018/09/drag-drop-datatransfer-js/)
+- 在 div 上绑定`ondrop`事件等等可能会被子元素(如图片)等触发, 解决方法是在有drag 操作时添加一个 drag 的 className,然后添加 css . 这样可以不影响 hover 伪元素
+    ```css
+    .drag *{
+      pointer-events: none;
+    }
+    ```
 ## 参考文档
 - [鑫空间/安兹·乌尔·恭的超位魔法-任意拖拽](https://www.zhangxinxu.com/wordpress/2018/09/drag-drop-datatransfer-js/)
 - [掘金 Koa2文件上传下载](https://juejin.im/post/5abc451ff265da23a2292dd4)
