@@ -26,7 +26,8 @@ router.post('/upload', async function (ctx) {
     console.log(files);
     for (let key in files) {
         const file = files[key];
-        const filePath = path.join(outputDir, file.name);
+        var filePath = path.join(outputDir, file.name);
+        filePath = HashFileName(filePath);
         const reader = fs.createReadStream(file.path);
         const writer = fs.createWriteStream(filePath);
         reader.pipe(writer);
@@ -63,3 +64,15 @@ app.use(serve(__dirname))
 app.listen(8200, () => {
     console.log('koa is listening on 8200...');
 })
+
+//检查文件是否存在,若不存在则返回原文件及路径名,若已存在则递增序号
+function HashFileName(path){
+    if(!fs.existsSync(path)) return path;
+    var i = 2;
+    /(.*)\.([^\.]+)/.test(path)
+    var name = RegExp.$1,type = RegExp.$2;
+    while(fs.existsSync(name+i+'.'+type)){
+        i++;
+    }
+    return name+i+'.'+type;
+}
