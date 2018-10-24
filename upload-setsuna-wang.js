@@ -2,7 +2,7 @@ const Koa = require('koa')
 const fs = require('fs')
 const app = new Koa()
 const Router = require('koa-router')
-const serve = require('koa-static')
+const staticCache = require('koa-static-cache')
 const koaBody = require('koa-body');
 
 
@@ -60,7 +60,9 @@ app.use(koaBody({
 }));
 app.use(router.routes())
 app.use(router.allowedMethods())
-app.use(serve(__dirname))
+app.use(staticCache(path.join(__dirname), {
+  maxAge: 365 * 24 * 60 * 60
+}))
 app.listen(8200, () => {
     console.log('koa is listening on 8200...');
 })

@@ -28,10 +28,8 @@ var app = new Vue({
     onDelete: function () { },		//文件删除后
     onDragOver: function (e) {
       //文件拖拽到敏感区域时
-      console.log(e)
       this.isDrag = true;
       var classList = e.target.classList.toString()
-      console.log(classList)
       if(classList.indexOf('area') != -1){
         e.dataTransfer.dropEffect = "copy";
         this.isHover = true;
