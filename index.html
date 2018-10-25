@@ -30,7 +30,7 @@
       <span class="folder-open" @click="$refs.input.click()">添加文件</span>
       <span id="fileSubmit" class="folder-open" @click="funUploadFile">确认上传</span>
     </div>
-    <div v-if="filePaths.length>=0" class="filePaths">
+    <div v-if="filePaths.length>" class="filePaths">
       <p>上传成功,URL为:</p>
       <p v-for="(item,index) in filePaths" :key="index">{{item}}</p>
     </div>
