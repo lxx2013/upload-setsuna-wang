@@ -4,12 +4,14 @@
 ## 接口设计 *可参考 sm.ms*
 
 ## 计划
-- [ ] 初始时简单完成:
+- [x] 初始时简单完成:
   - [x] 文件上传接口 `v0.1.0`
   - [x] 拖拽相关操作 `v0.2.0`
-  - [ ] 图床上的图片链接
-  - [ ] clipboard 
-- [ ] [laobubu](https://github.com/laobubu)提出的根据一个 url 拿到需打印文档的服务,例如在打印店里访问`http://xx.firefox.com/fileName.doc`来打印
+  - [x] 图床上的图片链接 `v1.0.0`
+  - [x] [laobubu](https://github.com/laobubu)提出的根据一个 url 拿到需打印文档的服务,现在可以在打印店里访问`https://i.setsuna.wang`来打印
+-  额外的需求:
+  - [ ] 图片以外的缩略图处理,例如`.md .css .doc .ppt .pdf`
+  - [ ] clipboard 支持
 - [ ] 图片切割 `image?width=200&height=200/webp`
 - [ ] 后期前端页面切换为`vuetify`+`nuxt`
 - [ ] 增加第三方的图床 API

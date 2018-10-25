@@ -11,6 +11,7 @@ var app = new Vue({
     fileFilter: [],					//过滤后的文件数组
     isHover:false,
     isDrag:false,
+    filePaths:[]
   },
   methods: {
     readFile: function (file) {
@@ -40,7 +41,16 @@ var app = new Vue({
       }
     },	
     onProgress: function () { },		//文件上传进度
-    onSuccess: function () { },		//文件上传成功时
+    onSuccess: function (file,responseText) {
+      //文件上传成功时
+      try{
+        let res = JSON.parse(responseText)
+        this.filePaths.push(res.filePaths.join('\n'))
+      }
+      catch(err){
+        throw new Error(`[lxxFile.js onSuccess]responseText Error ${err}`)
+      }
+    },		
     onFailure: function () { },		//文件上传失败时,
     onComplete: function () { },		//文件全部上传完毕时
     /* 开发参数和内置方法分界线 */

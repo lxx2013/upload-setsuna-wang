@@ -9,8 +9,8 @@
   overflow:auto;
 }
 .area{
-  max-width:432px;
-  max-height:250px;
+  max-width:600px;
+  max-height:400px;
   width: 80vw;
   height: 80vw;
   margin: 80px auto 0;
@@ -102,4 +102,24 @@
 }
 .small{
   width:33%;
+}
+.filePaths{
+  background-color: #00000044;
+  box-shadow: 0 0px 4px 0 rgba(0,0,0,0.8);
+  color:white;
+  max-width:600px;
+  max-height:250px;
+  width: 80vw;
+  box-sizing:border-box;
+  margin: 20px auto 0;
+  padding: 10px;
+
+}
+.filePaths p:first-of-type{
+  user-select: none;
+  padding:2px 5px;
+}
+.filePaths p+p{
+  background-color: #00000055;
+  padding:2px 5px;
 }
