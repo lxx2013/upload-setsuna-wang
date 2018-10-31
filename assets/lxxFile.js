@@ -14,6 +14,17 @@ var app = new Vue({
     filePaths:[]
   },
   methods: {
+    SuffixToSVG(str) {
+      if (["doc", "docx"].indexOf(str) != -1) {
+        return "assets/word.svg"
+      } else if (["ppt", "pptx"].indexOf(str) != -1){
+        return "assets/ppt.svg"
+      } else if (["pdf"].indexOf(str) != -1){
+        return "assets/pdf.svg"
+      }else{
+        return "assets/file.svg"
+      }
+    },
     readFile: function (file) {
       return new Promise((resolve, reject) => {
         var reader = new FileReader()
@@ -62,7 +73,14 @@ var app = new Vue({
       var files = e.target.files || e.dataTransfer.files;
       //继续添加文件
       for (var i = 0; i < files.length; i++) {
-        files[i].result = await this.readFile(files[i])
+        let suffix = files[i].name.match(/.*\.([^.]*)/)[1].toLowerCase()
+        if( ["png","jpeg","jpg","gif","svg","bmp"].indexOf(suffix) == -1){
+          files[i].result = this.SuffixToSVG(suffix)
+          files[i].class = "default"
+        } 
+        else{
+          files[i].result = await this.readFile(files[i])
+        }
         this.fileFilter.push(files[i])
       }
     },

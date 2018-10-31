@@ -5,8 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>upload</title>
+  <title>打印文件中转站 - upload.setsuna.wang</title>
   <link rel="stylesheet" href="./assets/main.css">
+  <link rel="icon" sizes="any" mask="" href="./assets/file.svg">
+
 </head>
 
 <body>
@@ -16,7 +18,7 @@
         <span v-if="!fileFilter.length">Drag & drop files here ...</span>
         <div id="uploadList"class="upload_append_list" :class="fileFilter.length<=4?'mid':'small'" v-for="(item,index) in fileFilter" :key="index">
            <div>
-             <img :src="item.result" class="upload_image" />
+             <img :src="item.result" class="upload_image" :class="item.class"/>
              <div class="img-info"> 
                <span class="img-title" >{{item.name}}</span>
                <a href="javascript:" class="upload_delete" title="删除"></a>
@@ -28,7 +30,7 @@
     </div>
     <div class="button">
       <span class="folder-open" @click="$refs.input.click()">添加文件</span>
-      <span id="fileSubmit" class="folder-open" @click="funUploadFile">确认上传</span>
+      <span id="fileSubmit" class="folder-open" @click="funUploadFile" :class="{noneFile:!(fileFilter && fileFilter.length)}" :title="(fileFilter && fileFilter.length)?'现在可以上传啦!':'先添加文件才能上传噢!'">确认上传</span>
     </div>
     <div v-if="filePaths.length" class="filePaths">
       <p>上传成功,URL为:</p>
@@ -41,8 +43,8 @@
   </div>
 </body>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!-- 生产环境版本，优化了尺寸和速度 -->
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 <script src="./assets/lxxFile.js"></script>
 </html>

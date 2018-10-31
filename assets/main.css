@@ -113,7 +113,7 @@
   box-sizing:border-box;
   margin: 20px auto 0;
   padding: 10px;
-
+  font-family:"PingFang SC",Menlo,Monaco,Consolas,"Courier New",monospace;
 }
 .filePaths p:first-of-type{
   user-select: none;
@@ -122,4 +122,14 @@
 .filePaths p+p{
   background-color: #00000055;
   padding:2px 5px;
+}
+.default{
+  width: 40%;
+}
+.noneFile{
+  background-color:grey;
+  cursor: not-allowed;
+}
+.noneFile:hover{
+  background-color:#80808080;
 }
